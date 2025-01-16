@@ -27,22 +27,22 @@ class Player(pygame.sprite.Sprite):
         self.game = game
 
         # Load sprite images
-        self.upSprite = pygame.image.load('img/playerU.png')
-        self.downSprite = pygame.image.load('img/playerD.png')
-        self.leftSprite = pygame.image.load('img/playerL.png')
-        self.rightSprite = pygame.image.load('img/playerR.png')
+        self.up = pygame.image.load('img/player_up.png')
+        self.down = pygame.image.load('img/player_down.png')
+        self.left = pygame.image.load('img/player_left.png')
+        self.right = pygame.image.load('img/player_right.png')
 
         # Resize        
-        self.upSprite = pygame.transform.scale(self.upSprite, [SPRITE_SIZE_PIX, SPRITE_SIZE_PIX])
-        self.downSprite = pygame.transform.scale(self.downSprite, [SPRITE_SIZE_PIX, SPRITE_SIZE_PIX])
-        self.leftSprite = pygame.transform.scale(self.leftSprite, [SPRITE_SIZE_PIX, SPRITE_SIZE_PIX])
-        self.rightSprite = pygame.transform.scale(self.rightSprite, [SPRITE_SIZE_PIX, SPRITE_SIZE_PIX])
+        self.up = pygame.transform.scale(self.up, [SPRITE_SIZE_PIX, SPRITE_SIZE_PIX])
+        self.down = pygame.transform.scale(self.down, [SPRITE_SIZE_PIX, SPRITE_SIZE_PIX])
+        self.left = pygame.transform.scale(self.left, [SPRITE_SIZE_PIX, SPRITE_SIZE_PIX])
+        self.right = pygame.transform.scale(self.right, [SPRITE_SIZE_PIX, SPRITE_SIZE_PIX])
         
         # Initialize image
-        self.image = self.downSprite
+        self.image = self.down
 
         # Set position
-        self.bbox = pygame.Rect(x * SPRITE_SIZE_PIX, y * SPRITE_SIZE_PIX, SPRITE_SIZE_PIX, SPRITE_SIZE_PIX)
+        self.rect = pygame.Rect(x * SPRITE_SIZE_PIX, y * SPRITE_SIZE_PIX, SPRITE_SIZE_PIX, SPRITE_SIZE_PIX)
         self.x = x
         self.y = y
 
@@ -67,16 +67,16 @@ class Player(pygame.sprite.Sprite):
         move = None
         if key:
             if key == 'R':
-                self.image = self.rightSprite
+                self.image = self.right
                 move = (SPRITE_SIZE_PIX, 0)
             elif key == 'L':
-                self.image = self.leftSprite
+                self.image = self.left
                 move = (-SPRITE_SIZE_PIX, 0)
             elif key == 'U':
-                self.image = self.upSprite
+                self.image = self.up
                 move = (0, -SPRITE_SIZE_PIX)
             elif key == 'D':
-                self.image = self.downSprite
+                self.image = self.down
                 move = (0, SPRITE_SIZE_PIX)
         
         # Make move
@@ -91,7 +91,7 @@ class Player(pygame.sprite.Sprite):
                 is_box = isinstance(target_elem.obj, Box)
                 if not is_box or (is_box and target_elem.obj.can_move(move)):  # Empty space or moveable box
                     curr_elem = self.game.puzzle[curr]
-                    self.bbox.y, self.bbox.x = target_tile[0] * SPRITE_SIZE_PIX, target_tile[1] * SPRITE_SIZE_PIX
+                    self.rect.y, self.rect.x = target_tile[0] * SPRITE_SIZE_PIX, target_tile[1] * SPRITE_SIZE_PIX
                     self.y, self.x = target_tile
 
                     # Move box off space player is moving from

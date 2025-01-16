@@ -37,18 +37,7 @@ class Box(Sprite):
             self.update_sprite()
             return True
         return False
-    
-    def reverse_move(self, move):
-        target = self.y + move[0] // 64, self.x + move[1] // 64
-        curr_pos = self.y, self.x
-        self.game.puzzle[curr_pos].obj = None
-        self.game.puzzle[target].obj = self
-        self.rect.y, self.rect.x = target[0] * 64, target[1] * 64
-        self.y, self.x = target
-        self.game.puzzle[curr_pos].char = 'O' if self.game.puzzle[curr_pos].ground else '-'
-        self.game.puzzle[target].char = '*' if self.game.puzzle[target].ground else 'B'
-        self.update_sprite()
-    
+
     def update_sprite(self):
         curr_obj = self.game.puzzle[self.y, self.x]
         self.image = self.spriteg if curr_obj and curr_obj.ground else self.sprite

@@ -67,7 +67,7 @@ class Game:
         boxes_left = 0
         for h in range(self.height // 64):
             for w in range(self.width // 64):
-                if self.puzzle[h, w] and self.puzzle[h, w].char == '@':
+                if self.puzzle[h, w] and self.puzzle[h, w].char == 'B':
                     boxes_left += 1
         return boxes_left == 0
 
@@ -95,19 +95,19 @@ class Game:
                     for j, c in enumerate(line.strip().split()):
                         new_elem = PuzzleElement(c)
                         self.puzzle[i + pad_y, j + pad_x] = new_elem
-                        if c == '+':  # wall
+                        if c == '#':  # wall
                             new_elem.obj = Obstacle(self.object_group, x=j + pad_x, y=i + pad_y)
-                        elif c == '@':  # box
+                        elif c == 'B':  # box
                             new_elem.obj = Box(self.object_group, x=j + pad_x, y=i + pad_y, game=self)
-                        elif c == '*':  # player
+                        elif c == 'P':  # player
                             new_elem.obj = Player(
                                 self.object_group, self.player_group, 
                                 x=j + pad_x, y=i + pad_y, game=self
                             )
                             self.player = new_elem.obj
-                        elif c == 'X':  # goal
+                        elif c == 'O':  # goal
                             new_elem.ground = Goal(self.goal_group, x=j + pad_x, y=i + pad_y)
-                        elif c == '$':  # box on goal
+                        elif c == '*':  # box on goal
                             new_elem.ground = Goal(self.goal_group, x=j + pad_x, y=i + pad_y)
                             new_elem.obj = Box(self.object_group,  x=j + pad_x, y=i + pad_y, game=self)
                         elif c == '%':  # player on goal

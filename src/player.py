@@ -53,9 +53,9 @@ class Player(Sprite):
                     curr_elem = self.game.puzzle[curr]
                     self.rect.y, self.rect.x = target[0] * 64, target[1] * 64
                     self.y, self.x = target
-                    curr_elem.char = '-' if not curr_elem.ground else 'X'
+                    curr_elem.char = '-' if not curr_elem.ground else 'O'
                     curr_elem.obj = None
-                    target_elem.char = '*' if not target_elem.ground else '%'
+                    target_elem.char = 'P' if not target_elem.ground else '%'
                     target_elem.obj = self
                     return 1
         return 0

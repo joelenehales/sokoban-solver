@@ -74,7 +74,7 @@ def astar(matrix, player_pos, widget=None, visualizer=False, heuristic='manhatta
 
 def solve_astar(puzzle, widget=None, visualizer=False, heuristic='manhattan'):
 	matrix = puzzle
-	where = np.where((matrix == '*') | (matrix == '%'))
+	where = np.where((matrix == 'P') | (matrix == '%'))
 	player_pos = where[0][0], where[1][0]
 	return astar(matrix, player_pos, widget, visualizer, heuristic)
 

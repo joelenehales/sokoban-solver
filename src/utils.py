@@ -36,11 +36,11 @@ def find_boxes_and_goals(state, shape):
 	_, width = shape
 	boxes, goals, boxes_on_goal = [], [], []
 	for pos, char in enumerate(state):
-		if char == '@':
+		if char == 'B':
 			boxes.append((pos // width, pos % width))
 		elif char in 'X%':
 			goals.append((pos // width, pos % width))
-		elif char == '$':
+		elif char == '*':
 			boxes_on_goal.append((pos // width, pos % width))
 	return boxes, goals, boxes_on_goal
 
@@ -50,7 +50,7 @@ def get_state(matrix):
 
 
 def is_solved(state):
-	return '@' not in state
+	return 'B' not in state
 
 
 def manhattan_sum(state, player_pos, shape):
@@ -73,7 +73,7 @@ def dijkstra(state, shape, box_pos=None, player_pos=None):
 	dijk[box_pos or player_pos] = 0
 	moves = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 	heap = [(0, box_pos or player_pos)]
-	obstacles = '+' if player_pos else '+@$'
+	obstacles = '#' if player_pos else '+@$'
 	while heap:
 		distance, curr_pos = heappop(heap)
 		if distance > dijk[curr_pos]:
@@ -111,10 +111,10 @@ def is_deadlock(state, shape):
 	boxes, _, _ = find_boxes_and_goals(state, shape)
 	for bx, by in boxes:  # corner deadlock
 		box = bx * width + by
-		if ((state[box - 1] == '+' and state[box - width] == '+') or
-			(state[box + 1] == '+' and state[box + width] == '+') or
-			(state[box + 1] == '+' and state[box - width] == '+') or
-			(state[box - 1] == '+' and state[box + width] == '+')):
+		if ((state[box - 1] == '#' and state[box - width] == '#') or
+			(state[box + 1] == '#' and state[box + width] == '#') or
+			(state[box + 1] == '#' and state[box - width] == '#') or
+			(state[box - 1] == '#' and state[box + width] == '#')):
 			return True
 	double_box_positions = [
 		(0, -1, -width, -width - 1),
@@ -128,11 +128,11 @@ def is_deadlock(state, shape):
 			pos_set = set()
 			for dir in pos:
 				pos_set.add(state[box + dir])
-			if pos_set in ({'@', '+'}, {'@'}, {'@', '$'}, {'@', '$', '+'}):
+			if pos_set in ({'B', '#'}, {'B'}, {'B', '*'}, {'B', '*', '#'}):
 				return True
 	box = goal = 0
 	for i in range(width + 1, 2 * width - 1):  # too many boxes deadlock
-		if state[i] == '@':
+		if state[i] == 'B':
 			box += 1
 		elif state[i] in 'X%':
 			goal += 1
@@ -140,7 +140,7 @@ def is_deadlock(state, shape):
 		return True
 	box = goal = 0
 	for i in range(width * (height - 2) + 1, width * (height - 2) + width - 1):
-		if state[i] == '@':
+		if state[i] == 'B':
 			box += 1
 		elif state[i] in 'X%':
 			goal += 1
@@ -148,7 +148,7 @@ def is_deadlock(state, shape):
 		return True
 	box = goal = 0
 	for i in range(width + 1, width * (height - 1) + 1, width):
-		if state[i] == '@':
+		if state[i] == 'B':
 			box += 1
 		elif state[i] in 'X%':
 			goal += 1
@@ -156,7 +156,7 @@ def is_deadlock(state, shape):
 		return True
 	box = goal = 0
 	for i in range(2 * width - 2, width * height - 2, width):
-		if state[i] == '@':
+		if state[i] == 'B':
 			box += 1
 		elif state[i] in 'X%':
 			goal += 1
@@ -175,18 +175,18 @@ def can_move(state, shape, player_pos, move):
 	curr1d = x * width + y
 	target1d = target[0] * width + target[1]
 	boxtarget1d = boxtarget[0] * width + boxtarget[1]
-	if state[target1d] == '+':
+	if state[target1d] == '#':
 		return None, move_cost
 	elif state[target1d] in '-X':
-		new_state[curr1d] = '-' if new_state[curr1d] == '*' else 'X'
-		new_state[target1d] = '*' if new_state[target1d] == '-' else '%'
+		new_state[curr1d] = '-' if new_state[curr1d] == 'P' else 'O'
+		new_state[target1d] = 'P' if new_state[target1d] == '-' else '%'
 		move_cost = 3
 	elif state[target1d] in '@$':
 		if state[boxtarget1d] in '+@$':
 			return None, move_cost
 		elif state[boxtarget1d] in '-X':
-			new_state[boxtarget1d] = '@' if new_state[boxtarget1d] == '-' else '$'
-			new_state[target1d] = '*' if new_state[target1d] == '@' else '%'
-			new_state[curr1d] = '-' if new_state[curr1d] == '*' else 'X'
-			move_cost = 0 if new_state[boxtarget1d] == '$' else 2
+			new_state[boxtarget1d] = 'B' if new_state[boxtarget1d] == '-' else '*'
+			new_state[target1d] = 'P' if new_state[target1d] == 'B' else '%'
+			new_state[curr1d] = '-' if new_state[curr1d] == 'P' else 'O'
+			move_cost = 0 if new_state[boxtarget1d] == '*' else 2
 	return ''.join(new_state), move_cost

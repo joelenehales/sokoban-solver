@@ -62,7 +62,7 @@ def bfs(matrix, player_pos, widget=None, visualizer=False):
 
 def solve_bfs(puzzle, widget=None, visualizer=False):
 	matrix = puzzle
-	where = np.where((matrix == '*') | (matrix == '%'))
+	where = np.where((matrix == 'P') | (matrix == '%'))
 	player_pos = where[0][0], where[1][0]
 	return bfs(matrix, player_pos, widget, visualizer)
 

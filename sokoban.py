@@ -154,8 +154,6 @@ def play_game(window, level=1, **widgets):
 
 def main():
 	pygame.init()
-	displayIcon = pygame.image.load('img/icon.png')
-	pygame.display.set_icon(displayIcon)
 	window = pygame.display.set_mode((1216, 640))
 	pygame.display.set_caption('Sokoban')
 	level = 1

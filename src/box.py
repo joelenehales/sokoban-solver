@@ -12,7 +12,7 @@ class Box(Sprite):
     def __init__(self, *groups, x, y, game=None):
         super().__init__(*groups)
         self.game = game
-        self.sprite = pygame.image.load('img/box.png')
+        self.sprite = pygame.image.load('img/boulder.png')
         self.sprite = pygame.transform.scale(self.sprite, [64, 64])
         self.spriteg = pygame.image.load('img/boxg.png')
         self.spriteg = pygame.transform.scale(self.spriteg, [64, 64])
